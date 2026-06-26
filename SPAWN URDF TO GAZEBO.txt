@@ -1,0 +1,28 @@
+SPAWN URDF TO GAZEBO:
+1) gz sdf -p autonomous_car_project/amr_ws/src/amr_description/urdf/amr.urdf > amr.sdf
+2) gz service -s /world/empty/create --reqtype gz.msgs.EntityFactory --reptype gz.msgs.Boolean --timeout 1000 --req 'sdf_filename: "/home/'your username' /autonomous_car_project/amr_ws/src/amr_description/urdf/amr.urdf", name: "amr"'
+
+replace your username with your username qithout the quotation
+
+
+NB: make sure you add inertia properties to each part of the robot
+	<inertial>
+            <mass value="0.5"/>
+            <origin xyz="0 0 0"/>
+            <inertia
+            ixx="0.001"
+            ixy="0"
+            ixz="0"
+            iyy="0.001"
+            iyz="0"
+            izz="0.001"/>
+        </inertial>
+make sure to raise the robot relative to the world view
+    <link name="world"/>
+    <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    </joint>
+
+make sure to add collision properties to the tyres geometry and not the material <collision> </collision> this should be seperate
